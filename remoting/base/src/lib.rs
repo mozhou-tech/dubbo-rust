@@ -23,5 +23,6 @@ pub mod builder;
 pub mod codec;
 pub mod error;
 pub mod exchange;
+pub mod message;
 
 pub use exchange::{BoxedExchangeBody, Request, Response};
