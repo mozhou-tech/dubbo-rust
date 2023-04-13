@@ -112,6 +112,7 @@ impl Stream for DefaultIncoming {
 
 #[cfg(test)]
 mod tests {
+    use dubbo_logger::tracing::debug;
     use logger::tracing::debug;
     use tokio::{io::AsyncReadExt, net::TcpListener};
     use tokio_stream::wrappers::TcpListenerStream;

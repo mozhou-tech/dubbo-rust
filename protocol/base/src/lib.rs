@@ -19,5 +19,6 @@ pub mod error;
 pub mod invocation;
 pub mod invoker;
 pub mod output;
+pub mod rpcinvocation;
 
 pub type ProtocolName = &'static str;
