@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+use crate::invocation::BoxInvocation;
 use crate::{
-    invocation::BoxInvocation,
     output::{BoxOutput, RPCOutput},
+    r#mod::BoxInvocation,
 };
 use dubbo_base::{Node, Url};
 use std::{

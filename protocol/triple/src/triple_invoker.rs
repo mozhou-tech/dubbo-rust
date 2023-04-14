@@ -17,8 +17,8 @@
 use dubbo_base::{Node, Url};
 
 use protocol_base::{
-    invocation::BoxInvocation,
     invoker::{BaseInvoker, Invoker},
+    r#mod::BoxInvocation,
 };
 use std::sync::Arc;
 

@@ -10,3 +10,4 @@ dubbo-base.workspace = true
 thiserror.workspace = true
 tokio = { workspace = true, features = ["sync"] }
 dashmap.workspace = true
+tower-service.workspace = true
