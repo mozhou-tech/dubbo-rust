@@ -14,17 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+mod client;
+mod connect;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub use client::ClientTransport;
+use std::time::Duration;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+/// Configuration for the underlying h2 connection.
+#[derive(Debug, Clone, Copy)]
+pub struct Http2Config {
+    pub(crate) init_stream_window_size: u32,
+    pub(crate) init_connection_window_size: u32,
+    pub(crate) max_concurrent_streams: Option<u32>,
+    pub(crate) adaptive_window: bool,
+    pub(crate) http2_keepalive_interval: Option<Duration>,
+    pub(crate) http2_keepalive_timeout: Duration,
+    pub(crate) max_frame_size: Option<u32>,
+    pub(crate) max_send_buf_size: usize,
+    pub(crate) max_header_list_size: u32,
+    pub(crate) accept_http1: bool,
 }

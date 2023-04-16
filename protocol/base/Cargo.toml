@@ -8,6 +8,15 @@ edition = "2021"
 [dependencies]
 dubbo-base.workspace = true
 thiserror.workspace = true
-tokio = { workspace = true, features = ["sync"] }
+tokio = { workspace = true, features = ["sync", "test-util", "net", "bytes"] }
 dashmap.workspace = true
 tower-service.workspace = true
+remoting-net.workspace = true
+
+[dev-dependencies]
+tower-http = { workspace = true, features = ["full"] }
+tower = { workspace = true, features = ["full"] }
+http.workspace = true
+futures.workspace = true
+bytes.workspace = true
+tokio-tower.workspace = true

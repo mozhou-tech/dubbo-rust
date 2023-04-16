@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-mod invocation_tests;
 pub mod rpcinvocation;
 pub mod service;
 

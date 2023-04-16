@@ -24,25 +24,26 @@ use tower_service::Service;
 use crate::invocation::{Invocation, InvocationField};
 use crate::invoker::Invoker;
 
-#[derive(Copy, Clone)]
+#[derive(Clone)]
 pub struct RpcInvocationService {
     inner: RpcInvocation,
 }
 
-impl<Request> Service<Request> for RpcInvocationService {
-    type Response = ();
-    type Error = ();
-    type Future = ();
+// impl<Request> Service<Request> for RpcInvocationService {
+//     type Response = ();
+//     type Error = ();
+//     type Future = ();
+//
+//     fn poll_ready(&mut self, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+//         todo!()
+//     }
+//
+//     fn call(&mut self, req: Request) -> Self::Future {
+//         todo!()
+//     }
+// }
 
-    fn poll_ready(&mut self, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
-        todo!()
-    }
-
-    fn call(&mut self, req: Request) -> Self::Future {
-        todo!()
-    }
-}
-
+#[derive(Clone)]
 pub struct RpcInvocation {
     method_name: String,
     parameter_type_names: Vec<String>,

@@ -36,16 +36,16 @@ pub trait InvocationService<Request> {
     fn call(&mut self, req: Request) -> Self::Future;
 }
 
-impl<Request> InvocationService<Request> for RpcInvocation {
-    type Response = ();
-    type Error = ();
-    type Future = Future<Output = Result<Self::Response, Self::Error>>;
-
-    fn poll_ready(&mut self, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
-        todo!()
-    }
-
-    fn call(&mut self, req: Request) -> Self::Future {
-        todo!()
-    }
-}
+// impl<Request> InvocationService<Request> for RpcInvocation {
+//     type Response = ();
+//     type Error = ();
+//     type Future = ();
+//
+//     fn poll_ready(&mut self, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+//         todo!()
+//     }
+//
+//     fn call(&mut self, req: Request) -> Self::Future {
+//         todo!()
+//     }
+// }

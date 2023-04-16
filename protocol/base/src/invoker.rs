@@ -15,10 +15,7 @@
  * limitations under the License.
  */
 use crate::invocation::BoxInvocation;
-use crate::{
-    output::{BoxOutput, RPCOutput},
-    r#mod::BoxInvocation,
-};
+use crate::output::{BoxOutput, RPCOutput};
 use dubbo_base::{Node, Url};
 use std::{
     fmt::{Display, Formatter},
