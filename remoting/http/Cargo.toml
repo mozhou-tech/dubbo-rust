@@ -12,4 +12,16 @@ remoting-net.workspace = true
 futures.workspace = true
 tower = { workspace = true, features = ["util", "make"] }
 tower-service.workspace = true
-tokio = { workspace = true, features = [] }
+tokio = { workspace = true, features = ["full"] }
+axum = { workspace = true }
+tonic = { workspace = true }
+prost = { workspace = true }
+dubbo-logger.workspace = true
+tonic-reflection.workspace = true
+
+[build-dependencies]
+tonic-build = { version = "0.9", features = ["prost"] }
+
+[[example]]
+name = "combine_triple_rest"
+path = "examples/combine_triple_rest.rs"

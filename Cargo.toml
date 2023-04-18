@@ -1,25 +1,25 @@
 [workspace]
 members = [
-  "common/logger",
-  "common/utils",
-  "common/extention",
-  "common/base",
-  "registry/zookeeper",
-  "registry/nacos",
-  "metadata",
-  "config",
-  "dubbo",
-  "examples/echo",
-  "examples/greeter",
-  "dubbo-build",
-  "remoting/net",
-  "remoting/http",
-  "remoting/zookeeper",
-  "remoting/base",
-  "remoting/xds",
-  "protocol/dubbo2",
-  "protocol/base",
-  "protocol/triple"
+    "common/logger",
+    "common/utils",
+    "common/extention",
+    "common/base",
+    "registry/zookeeper",
+    "registry/nacos",
+    "metadata",
+    "config",
+    "dubbo",
+    "examples/echo",
+    "examples/greeter",
+    "dubbo-build",
+    "remoting/net",
+    "remoting/http",
+    "remoting/zookeeper",
+    "remoting/base",
+    "remoting/xds",
+    "protocol/dubbo2",
+    "protocol/base",
+    "protocol/triple"
 ]
 
 
@@ -39,16 +39,16 @@ futures = "0.3"
 serde = "1"
 serde_json = "1"
 urlencoding = "2.1.2"
-dubbo-logger = {path="./common/logger"}
-dubbo-utils = {path="./common/utils"}
-dubbo-base = {path="./common/base"}
-remoting-net = {path="./remoting/net"}
-remoting-base = {path="./remoting/base"}
-protocol-base = {path= "protocol/base" }
-protocol-dubbo2 = {path="./protocol/dubbo2"}
-protocol-triple = {path="./protocol/triple"}
-registry-zookeeper = {path="./registry/zookeeper"}
-registry-nacos = {path="./registry/nacos"}
+dubbo-logger = { path = "./common/logger" }
+dubbo-utils = { path = "./common/utils" }
+dubbo-base = { path = "./common/base" }
+remoting-net = { path = "./remoting/net" }
+remoting-base = { path = "./remoting/base" }
+protocol-base = { path = "protocol/base" }
+protocol-dubbo2 = { path = "./protocol/dubbo2" }
+protocol-triple = { path = "./protocol/triple" }
+registry-zookeeper = { path = "./registry/zookeeper" }
+registry-nacos = { path = "./registry/nacos" }
 anyhow = "1.0.66"
 thiserror = "1.0.30"
 dubbo = { path = "./dubbo/" }
@@ -59,8 +59,12 @@ itertools = "0.10.1"
 tokio-tower = "0.6.0"
 bytes = "1.0"
 tower-http = "0.4.0"
+axum = "0.6.15"
 http = "0.2.9"
 hex = "0.4.3"
 hyper = "0.14.26"
+tonic = "0.9.1"
+prost = "0.11.9"
+tonic-reflection = "0.9.1"
 
 
