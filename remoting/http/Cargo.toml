@@ -24,4 +24,4 @@ tonic-build = { version = "0.9", features = ["prost"] }
 
 [[example]]
 name = "combine_triple_rest"
-path = "examples/combine_triple_rest.rs"
+path = "examples/combined_triple_rest.rs"
