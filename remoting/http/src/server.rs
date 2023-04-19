@@ -15,17 +15,21 @@
  * limitations under the License.
  */
 
-use std::fmt;
-use axum::{routing::get, Router};
+use axum::{routing::get, Router, ServiceExt};
 use proto::{
     greeter_server::{Greeter, GreeterServer},
     HelloReply, HelloRequest,
 };
 use std::net::SocketAddr;
-use std::task::{Context, Poll};
 use std::time::Duration;
+use axum::http::HeaderName;
+use hyper::{Body, header, Response};
+use hyper::body::HttpBody;
+use hyper::header::HeaderValue;
 use tonic::{Response as TonicResponse, Status};
 use tower::{Service, ServiceBuilder};
+use tower_http::set_header::{SetRequestHeaderLayer, SetResponseHeader, SetResponseHeaderLayer};
+use tower_http::trace::TraceLayer;
 use dubbo_logger::tracing;
 use dubbo_logger::tracing::info;
 use crate::multiplex_service::MultiplexService;
@@ -79,13 +83,25 @@ pub async fn launch() {
     let service = MultiplexService::new(rest, grpc);
 
     let svc = ServiceBuilder::new()
-        .timeout(Duration::from_secs(1))
+        .layer(TraceLayer::new_for_http())
+        .layer(
+            SetRequestHeaderLayer::if_not_present(
+                header::WARNING,
+                HeaderValue::from_static("my very cool app"),
+            )
+        )
+        .layer(
+            SetResponseHeaderLayer::overriding(
+                header::USER_AGENT,
+                HeaderValue::from_static("My-Value"),
+            )
+        )
         .service(service);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
-    tracing::debug!("listening on {}", addr);
+    println!("listening on {}", addr);
     axum::Server::bind(&addr)
-        .serve(tower::make::Shared::new(svc))
+        .serve(svc.into_make_service())
         .await
         .unwrap();
 }
