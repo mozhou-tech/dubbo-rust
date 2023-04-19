@@ -21,16 +21,12 @@ use proto::{
     HelloReply, HelloRequest,
 };
 use std::net::SocketAddr;
-use std::time::Duration;
-use axum::http::HeaderName;
-use hyper::{Body, header, Response};
-use hyper::body::HttpBody;
+use hyper::{header};
 use hyper::header::HeaderValue;
 use tonic::{Response as TonicResponse, Status};
-use tower::{Service, ServiceBuilder};
-use tower_http::set_header::{SetRequestHeaderLayer, SetResponseHeader, SetResponseHeaderLayer};
-use tower_http::trace::TraceLayer;
-use dubbo_logger::tracing;
+use tower::{ServiceBuilder};
+use tower_http::set_header::{SetRequestHeaderLayer, SetResponseHeaderLayer};
+use tower_http::trace::{DefaultMakeSpan, TraceLayer};
 use dubbo_logger::tracing::info;
 use crate::multiplex_service::MultiplexService;
 
@@ -65,11 +61,10 @@ pub(crate) async fn web_root() -> &'static str {
     "Hello, World!"
 }
 
-
 pub async fn launch() {
-    // build the rest service
+    // build the rest invocation
     let rest = Router::new().route("/", get(web_root));
-    // build the grpc service
+    // build the grpc invocation
     let reflection_service = tonic_reflection::server::Builder::configure()
         .register_encoded_file_descriptor_set(proto::FILE_DESCRIPTOR_SET)
         .build()
@@ -79,9 +74,10 @@ pub async fn launch() {
         .add_service(GreeterServer::new(GrpcServiceImpl::default()))
         .into_service();
 
-    // combine them into one service
+    // combine them into one invocation
     let service = MultiplexService::new(rest, grpc);
-
+    let trace_layer = TraceLayer::new_for_http()
+        .make_span_with(DefaultMakeSpan::default());
     let svc = ServiceBuilder::new()
         .layer(TraceLayer::new_for_http())
         .layer(
@@ -96,6 +92,7 @@ pub async fn launch() {
                 HeaderValue::from_static("My-Value"),
             )
         )
+        .layer(trace_layer)
         .service(service);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));

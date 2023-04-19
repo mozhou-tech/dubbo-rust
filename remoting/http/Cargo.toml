@@ -9,6 +9,8 @@ edition = "2021"
 hyper = { workspace = true, features = ["client", "server", "http1", "http2"] }
 hex.workspace = true
 remoting-net.workspace = true
+remoting-base.workspace = true
+protocol-base.workspace = true
 futures.workspace = true
 tower = { workspace = true, features = ["util", "make"] }
 tower-service.workspace = true

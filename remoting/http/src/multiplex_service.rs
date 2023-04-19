@@ -73,7 +73,7 @@ where
     type Future = BoxFuture<'static, Result<Self::Response, Self::Error>>;
 
     fn poll_ready(&mut self, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
-        // drive readiness for each inner service and record which is ready
+        // drive readiness for each inner invocation and record which is ready
         loop {
             match (self.rest_ready, self.grpc_ready) {
                 (true, true) => {
@@ -96,15 +96,15 @@ where
         // as per the `tower::Service` contract
         assert!(
             self.grpc_ready,
-            "grpc service not ready. Did you forget to call `poll_ready`?"
+            "grpc invocation not ready. Did you forget to call `poll_ready`?"
         );
         assert!(
             self.rest_ready,
-            "rest service not ready. Did you forget to call `poll_ready`?"
+            "rest invocation not ready. Did you forget to call `poll_ready`?"
         );
 
-        // if we get a grpc request call the grpc service, otherwise call the rest service
-        // when calling a service it becomes not-ready so we have drive readiness again
+        // if we get a grpc request call the grpc invocation, otherwise call the rest invocation
+        // when calling a invocation it becomes not-ready so we have drive readiness again
         if is_grpc_request(&req) {
             self.grpc_ready = false;
             let future = self.grpc.call(req);
