@@ -44,7 +44,7 @@ pub struct ExchangeClient {
     address: String,              // listening ip:port
     client: Option<BoxedClient>,  // dealing with the transports
     init: AtomicBool,             // whether the client is initialized
-    active: AtomicI32,            // the number of active service bind to this client
+    active: AtomicI32,            // the number of active invocation bind to this client
 }
 
 impl ExchangeClient {

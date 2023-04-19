@@ -12,6 +12,7 @@ tokio = { workspace = true, features = ["sync", "test-util", "net", "bytes"] }
 dashmap.workspace = true
 tower-service.workspace = true
 remoting-net.workspace = true
+hyper.workspace = true
 
 [dev-dependencies]
 tower-http = { workspace = true, features = ["full"] }
