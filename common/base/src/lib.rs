@@ -21,6 +21,7 @@
 pub mod constants;
 pub mod node;
 pub mod url;
+pub mod typed_value;
 
 pub use node::Node;
 pub use url::Url;

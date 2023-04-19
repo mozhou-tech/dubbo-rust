@@ -23,40 +23,25 @@ pub use rpc_invocation::RpcInvocation;
 
 use dashmap::DashMap;
 use std::{any::Any, sync::Arc};
+use dubbo_base::typed_value::TypedValue;
 
 use crate::invoker::Invoker;
 
-#[derive(Clone, Debug)]
-pub enum InvocationType {
-    String(String),
-    Bytes(Vec<u8>),
-    Bool(bool),
-    I8(i8),
-    I16(i16),
-    I32(i32),
-    I64(i64),
-    U8(u8),
-    U16(u16),
-    U32(u32),
-    U64(u64),
-    F32(f32),
-    F64(f64),
-}
 
 pub trait Invocation {
     fn method_name(&self) -> String;
     fn parameter_type_names(&self) -> Vec<String>;
-    fn parameter_values(&self) -> Vec<InvocationType>;
-    fn arguments(&self) -> Vec<InvocationType>;
+    fn parameter_values(&self) -> Vec<TypedValue>;
+    fn arguments(&self) -> Vec<TypedValue>;
     fn reply(&self) -> Option<Arc<dyn Any>>;
     fn invoker(&self) -> Option<Arc<dyn Invoker<Output=dyn Any>>>;
-    fn attachments(&self) -> DashMap<String, InvocationType>;
-    fn get_attachment(&self, key: &str) -> Option<InvocationType>;
-    fn set_attachment(&mut self, key: &str, value: InvocationType);
-    fn attributes(&self) -> DashMap<String, InvocationType>;
-    fn get_attribute(&self, key: &str) -> Option<InvocationType>;
-    fn get_attribute_with_default(&self, key: &str, default: InvocationType) -> InvocationType;
-    fn set_attribute(&mut self, key: &str, value: InvocationType);
+    fn attachments(&self) -> DashMap<String, TypedValue>;
+    fn get_attachment(&self, key: &str) -> Option<TypedValue>;
+    fn set_attachment(&mut self, key: &str, value: TypedValue);
+    fn attributes(&self) -> DashMap<String, TypedValue>;
+    fn get_attribute(&self, key: &str) -> Option<TypedValue>;
+    fn get_attribute_with_default(&self, key: &str, default: TypedValue) -> TypedValue;
+    fn set_attribute(&mut self, key: &str, value: TypedValue);
 }
 
 pub type BoxInvocation = Arc<dyn Invocation + Send + Sync>;

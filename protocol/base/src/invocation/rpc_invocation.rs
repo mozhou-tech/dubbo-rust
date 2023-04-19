@@ -19,8 +19,9 @@ use std::fmt::{Debug, Formatter};
 use std::sync::Arc;
 
 use dashmap::DashMap;
+use dubbo_base::typed_value::TypedValue;
 
-use crate::invocation::{Invocation, InvocationType};
+use crate::invocation::{Invocation};
 use crate::invoker::Invoker;
 
 #[derive(Clone)]
@@ -33,18 +34,20 @@ pub struct RpcInvocationService {
 pub struct RpcInvocation {
     method_name: String,
     parameter_type_names: Vec<String>,
-    parameter_values: Vec<InvocationType>,
-    arguments: Vec<InvocationType>,
+    parameter_values: Vec<TypedValue>,
+    arguments: Vec<TypedValue>,
     reply: Option<Arc<dyn Any>>,
     invoker: Option<Arc<dyn Invoker<Output=dyn Any>>>,
-    attachments: DashMap<String, InvocationType>,
-    attributes: DashMap<String, InvocationType>,
+    attachments: DashMap<String, TypedValue>,
+    attributes: DashMap<String, TypedValue>,
 }
 
 impl Debug for RpcInvocation {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("RpcInvocation")
             .field("method_name", &self.method_name)
+            .field("arguments", &self.arguments)
+            .field("parameter_values", &self.parameter_values)
             .finish()
     }
 }
@@ -58,6 +61,20 @@ impl RpcInvocation {
         self.method_name = method_name.to_string();
         self
     }
+
+    pub fn set_parameter_type_names(mut self, parameter_type_names: Vec<String>) -> Self {
+        self.parameter_type_names = parameter_type_names;
+        self
+    }
+
+    pub fn set_parameter_values(mut self, parameter_values: Vec<TypedValue>) -> Self {
+        self.parameter_values = parameter_values;
+        self
+    }
+    pub fn set_arguments(mut self, arguments: Vec<TypedValue>) -> Self {
+        self.arguments = arguments;
+        self
+    }
 }
 
 impl Invocation for RpcInvocation {
@@ -69,11 +86,11 @@ impl Invocation for RpcInvocation {
         self.parameter_type_names.clone()
     }
 
-    fn parameter_values(&self) -> Vec<InvocationType> {
+    fn parameter_values(&self) -> Vec<TypedValue> {
         self.parameter_values.clone()
     }
 
-    fn arguments(&self) -> Vec<InvocationType> {
+    fn arguments(&self) -> Vec<TypedValue> {
         self.arguments.clone()
     }
 
@@ -85,11 +102,11 @@ impl Invocation for RpcInvocation {
         self.invoker.clone()
     }
 
-    fn attachments(&self) -> DashMap<String, InvocationType> {
+    fn attachments(&self) -> DashMap<String, TypedValue> {
         self.attachments.clone()
     }
 
-    fn get_attachment(&self, key: &str) -> Option<InvocationType> {
+    fn get_attachment(&self, key: &str) -> Option<TypedValue> {
         let option = self.attachments.get(key);
         match option {
             None => None,
@@ -97,15 +114,15 @@ impl Invocation for RpcInvocation {
         }
     }
 
-    fn set_attachment(&mut self, key: &str, value: InvocationType) {
+    fn set_attachment(&mut self, key: &str, value: TypedValue) {
         self.attachments.insert(key.to_string(), value);
     }
 
-    fn attributes(&self) -> DashMap<String, InvocationType> {
+    fn attributes(&self) -> DashMap<String, TypedValue> {
         self.attributes.clone()
     }
 
-    fn get_attribute(&self, key: &str) -> Option<InvocationType> {
+    fn get_attribute(&self, key: &str) -> Option<TypedValue> {
         if self.attributes.contains_key(key) {
             Some(self.attributes.get(key).unwrap().clone())
         } else {
@@ -113,7 +130,7 @@ impl Invocation for RpcInvocation {
         }
     }
 
-    fn get_attribute_with_default(&self, key: &str, default: InvocationType) -> InvocationType {
+    fn get_attribute_with_default(&self, key: &str, default: TypedValue) -> TypedValue {
         if self.attributes.contains_key(key) {
             self.attributes.get(key).unwrap().clone()
         } else {
@@ -121,7 +138,7 @@ impl Invocation for RpcInvocation {
         }
     }
 
-    fn set_attribute(&mut self, key: &str, value: InvocationType) {
+    fn set_attribute(&mut self, key: &str, value: TypedValue) {
         self.attributes.insert(key.to_string(), value);
     }
 }
