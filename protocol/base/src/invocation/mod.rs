@@ -15,8 +15,11 @@
  * limitations under the License.
  */
 
-pub mod rpcinvocation;
+mod rpc_invocation;
 pub mod service;
+pub mod converter;
+
+pub use rpc_invocation::RpcInvocation;
 
 use dashmap::DashMap;
 use std::{any::Any, sync::Arc};
@@ -24,7 +27,7 @@ use std::{any::Any, sync::Arc};
 use crate::invoker::Invoker;
 
 #[derive(Clone, Debug)]
-pub enum InvocationField {
+pub enum InvocationType {
     String(String),
     Bytes(Vec<u8>),
     Bool(bool),
@@ -43,17 +46,17 @@ pub enum InvocationField {
 pub trait Invocation {
     fn method_name(&self) -> String;
     fn parameter_type_names(&self) -> Vec<String>;
-    fn parameter_values(&self) -> Vec<InvocationField>;
-    fn arguments(&self) -> Vec<InvocationField>;
-    fn reply(&self) -> Arc<dyn Any>;
-    fn invoker(&self) -> Arc<dyn Invoker<Output = dyn Any>>;
-    fn attachments(&self) -> DashMap<String, InvocationField>;
-    fn get_attachment(&self, key: &str) -> Option<InvocationField>;
-    fn set_attachment(&mut self, key: &str, value: InvocationField);
-    fn attributes(&self) -> DashMap<String, InvocationField>;
-    fn get_attribute(&self, key: &str) -> Option<InvocationField>;
-    fn get_attribute_with_default(&self, key: &str, default: InvocationField) -> InvocationField;
-    fn set_attribute(&mut self, key: &str, value: InvocationField);
+    fn parameter_values(&self) -> Vec<InvocationType>;
+    fn arguments(&self) -> Vec<InvocationType>;
+    fn reply(&self) -> Option<Arc<dyn Any>>;
+    fn invoker(&self) -> Option<Arc<dyn Invoker<Output=dyn Any>>>;
+    fn attachments(&self) -> DashMap<String, InvocationType>;
+    fn get_attachment(&self, key: &str) -> Option<InvocationType>;
+    fn set_attachment(&mut self, key: &str, value: InvocationType);
+    fn attributes(&self) -> DashMap<String, InvocationType>;
+    fn get_attribute(&self, key: &str) -> Option<InvocationType>;
+    fn get_attribute_with_default(&self, key: &str, default: InvocationType) -> InvocationType;
+    fn set_attribute(&mut self, key: &str, value: InvocationType);
 }
 
 pub type BoxInvocation = Arc<dyn Invocation + Send + Sync>;

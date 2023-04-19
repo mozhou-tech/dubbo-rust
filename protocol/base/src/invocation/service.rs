@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-use crate::invocation::rpcinvocation::RpcInvocation;
 use std::future::Future;
 use std::task::{Context, Poll};
 
@@ -25,7 +24,7 @@ use std::task::{Context, Poll};
 pub trait InvocationService<Request> {
     type Response;
 
-    /// Errors produced by the service.
+    /// Errors produced by the invocation.
     type Error;
 
     /// The future response value.
