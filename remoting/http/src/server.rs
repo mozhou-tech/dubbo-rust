@@ -29,6 +29,7 @@ use tower_http::set_header::{SetRequestHeaderLayer, SetResponseHeaderLayer};
 use tower_http::trace::{DefaultMakeSpan, TraceLayer};
 use dubbo_logger::tracing::info;
 use crate::multiplex_service::MultiplexService;
+use crate::service::layer::LogLayer;
 
 mod proto {
     tonic::include_proto!("helloworld");
@@ -79,7 +80,6 @@ pub async fn launch() {
     let trace_layer = TraceLayer::new_for_http()
         .make_span_with(DefaultMakeSpan::default());
     let svc = ServiceBuilder::new()
-        .layer(TraceLayer::new_for_http())
         .layer(
             SetRequestHeaderLayer::if_not_present(
                 header::WARNING,
@@ -92,6 +92,8 @@ pub async fn launch() {
                 HeaderValue::from_static("My-Value"),
             )
         )
+        .layer(LogLayer::new("test01"))
+        .layer(LogLayer::new("test02"))
         .layer(trace_layer)
         .service(service);
 

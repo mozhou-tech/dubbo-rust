@@ -29,7 +29,6 @@ pub struct RpcInvocationService {
     inner: RpcInvocation,
 }
 
-
 #[derive(Clone, Default)]
 pub struct RpcInvocation {
     method_name: String,
@@ -37,6 +36,7 @@ pub struct RpcInvocation {
     parameter_values: Vec<TypedValue>,
     arguments: Vec<TypedValue>,
     reply: Option<Arc<dyn Any>>,
+    // 当前调用的服务提供者
     invoker: Option<Arc<dyn Invoker<Output=dyn Any>>>,
     attachments: DashMap<String, TypedValue>,
     attributes: DashMap<String, TypedValue>,
