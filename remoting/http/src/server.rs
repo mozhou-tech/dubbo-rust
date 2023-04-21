@@ -25,11 +25,11 @@ use hyper::{header};
 use hyper::header::HeaderValue;
 use tonic::{Response as TonicResponse, Status};
 use tower::{ServiceBuilder};
+use tower::make::Shared;
 use tower_http::set_header::{SetRequestHeaderLayer, SetResponseHeaderLayer};
 use tower_http::trace::{DefaultMakeSpan, TraceLayer};
 use dubbo_logger::tracing::info;
 use crate::invocation::layer::RpcInvocationLayer;
-use crate::log::layer::LogLayer;
 use crate::multiplex_service::MultiplexService;
 
 mod proto {
@@ -81,28 +81,28 @@ pub async fn launch() {
     let trace_layer = TraceLayer::new_for_http()
         .make_span_with(DefaultMakeSpan::default());
     let svc = ServiceBuilder::new()
-        .layer(
-            SetRequestHeaderLayer::if_not_present(
-                header::WARNING,
-                HeaderValue::from_static("my very cool app"),
-            )
-        )
-        .layer(
-            SetResponseHeaderLayer::overriding(
-                header::USER_AGENT,
-                HeaderValue::from_static("My-Value"),
-            )
-        )
-        .layer(RpcInvocationLayer::default())
-        .layer(LogLayer::new("test01"))
-        .layer(LogLayer::new("test02"))
+        // .layer(
+        //     SetRequestHeaderLayer::if_not_present(
+        //         header::WARNING,
+        //         HeaderValue::from_static("my very cool app"),
+        //     )
+        // )
+        // .layer(
+        //     SetResponseHeaderLayer::overriding(
+        //         header::USER_AGENT,
+        //         HeaderValue::from_static("My-Value"),
+        //     )
+        // )
+        // .layer(LogLayer::new("test01"))
+        // .layer(LogLayer::new("test02"))
         .layer(trace_layer)
+        // .layer(RpcInvocationLayer::default())
         .service(service);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     println!("listening on {}", addr);
     axum::Server::bind(&addr)
-        .serve(svc.into_make_service())
+        .serve(Shared::new(svc))
         .await
         .unwrap();
 }

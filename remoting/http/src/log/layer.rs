@@ -36,7 +36,7 @@ impl<S> Layer<S> for LogLayer {
     fn layer(&self, service: S) -> Self::Service {
         LogService {
             target: self.target,
-            service
+            inner: service
         }
     }
 }
