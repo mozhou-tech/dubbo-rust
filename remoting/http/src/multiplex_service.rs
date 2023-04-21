@@ -22,7 +22,6 @@ use std::{
     convert::Infallible,
     task::{Context, Poll},
 };
-use axum::body::HttpBody;
 use tower::Service;
 
 pub struct MultiplexService<A, B> {

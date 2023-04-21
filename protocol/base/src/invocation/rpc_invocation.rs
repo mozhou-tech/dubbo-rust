@@ -24,11 +24,6 @@ use dubbo_base::typed_value::TypedValue;
 use crate::invocation::{Invocation};
 use crate::invoker::Invoker;
 
-#[derive(Clone)]
-pub struct RpcInvocationService {
-    inner: RpcInvocation,
-}
-
 #[derive(Clone, Default)]
 pub struct RpcInvocation {
     method_name: String,

@@ -14,5 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-pub(crate) mod layer;
+use tower::Layer;
+use crate::invocation::service::RpcInvocationService;
+
+#[derive(Default)]
+pub struct RpcInvocationLayer;
+
+impl<S> Layer<S> for RpcInvocationLayer {
+    type Service = RpcInvocationService<S>;
+
+    fn layer(&self, service: S) -> Self::Service {
+        RpcInvocationService {
+            inner: service,
+            invocation: Default::default(),
+        }
+    }
+}
+
+
 

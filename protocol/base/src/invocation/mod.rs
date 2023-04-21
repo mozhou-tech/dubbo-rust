@@ -17,7 +17,6 @@
 
 mod rpc_invocation;
 pub mod service;
-pub mod converter;
 
 pub use rpc_invocation::RpcInvocation;
 

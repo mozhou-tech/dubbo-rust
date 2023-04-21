@@ -15,9 +15,28 @@
  * limitations under the License.
  */
 
-mod multiplex_service;
-mod server;
-mod log;
-mod invocation;
+use tower::Layer;
+use crate::log::service::LogService;
 
-pub use server::launch;
+pub struct LogLayer {
+    target: &'static str,
+}
+
+impl LogLayer{
+    pub fn new(target:&'static str)->LogLayer{
+        LogLayer{
+            target
+        }
+    }
+}
+
+impl<S> Layer<S> for LogLayer {
+    type Service = LogService<S>;
+
+    fn layer(&self, service: S) -> Self::Service {
+        LogService {
+            target: self.target,
+            service
+        }
+    }
+}

@@ -28,8 +28,9 @@ use tower::{ServiceBuilder};
 use tower_http::set_header::{SetRequestHeaderLayer, SetResponseHeaderLayer};
 use tower_http::trace::{DefaultMakeSpan, TraceLayer};
 use dubbo_logger::tracing::info;
+use crate::invocation::layer::RpcInvocationLayer;
+use crate::log::layer::LogLayer;
 use crate::multiplex_service::MultiplexService;
-use crate::service::layer::LogLayer;
 
 mod proto {
     tonic::include_proto!("helloworld");
@@ -92,6 +93,7 @@ pub async fn launch() {
                 HeaderValue::from_static("My-Value"),
             )
         )
+        .layer(RpcInvocationLayer::default())
         .layer(LogLayer::new("test01"))
         .layer(LogLayer::new("test02"))
         .layer(trace_layer)
